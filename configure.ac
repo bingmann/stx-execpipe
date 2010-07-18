@@ -6,7 +6,7 @@ AC_CONFIG_SRCDIR(src/stx-execpipe.cc)
 AC_CONFIG_AUX_DIR(acscripts)
 
 AM_INIT_AUTOMAKE
-# AM_MAINTAINER_MODE
+AM_MAINTAINER_MODE
 
 if test "$CFLAGS" == ""; then
     CFLAGS="-g"
