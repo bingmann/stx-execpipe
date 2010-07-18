@@ -1,4 +1,5 @@
 // -*- mode: c++; mode: flyspell; fill-column: 79 -*-
+// $Id$
 
 /** \file mainpage.dox
  * File containing the mainpage for the doxygen API documentation.
@@ -202,7 +203,7 @@ After checking the return error codes the pipe's results can be used.
 The tarball contains three simple examples of using the different exec()
 variants and input/output redirections. See \ref simple1.cc "examples/simple1.cc", \ref simple2.cc "examples/simple2.cc" or \ref simple3.cc "examples/simple3.cc".
 
-\subsection ssec_functionals Data Processing Classes
+\section sec_functionals Data Processing Classes
 
 One of the big features of the STX ExecPipe classes is the ability to insert
 intermediate asynchronous data processing classes into the pipe sequence. The
