@@ -58,5 +58,6 @@ AC_CHECK_LIB(crypto, CRYPTO_lock,
 )
 
 AC_CONFIG_FILES([Makefile
-		 src/Makefile])
+		 src/Makefile
+		 testsuite/Makefile])
 AC_OUTPUT
