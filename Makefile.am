@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = .
+SUBDIRS = src
 
 if GCOV
 

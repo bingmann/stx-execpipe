@@ -2,7 +2,7 @@
 
 AC_PREREQ(2.65)
 AC_INIT(stx-execpipe, 0.7)
-#AC_CONFIG_SRCDIR(src/stx-execpipe.cc)
+AC_CONFIG_SRCDIR(src/stx-execpipe.cc)
 AC_CONFIG_AUX_DIR(acscripts)
 
 AM_INIT_AUTOMAKE(foreign)
@@ -57,5 +57,6 @@ AC_CHECK_LIB(crypto, CRYPTO_lock,
   [AC_MSG_ERROR([ Required OpenSSL Crypto Library not found. ])]
 )
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile
+		 src/Makefile])
 AC_OUTPUT
