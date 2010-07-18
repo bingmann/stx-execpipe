@@ -20,4 +20,4 @@ clean-gcov:
 
 endif
 
-EXTRA_DIST = doxygen-html
+EXTRA_DIST = Doxyfile doxygen-html
