@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = src testsuite
+SUBDIRS = src testsuite examples
 
 if GCOV
 
