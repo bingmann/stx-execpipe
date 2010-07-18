@@ -38,20 +38,22 @@ the start and end of the pipe line.
 All this functionality is wrapped into a flexible C++ class, which can be used
 in an application to construct complex sequences of external programs similar
 to shell piping. Some common operations would be calls of mkisofs or tar
-coupled with gzip or gpg and possibly sent via ssh or ncftpput.
+coupled with gzip or gpg and possibly send the output to a remote host via ssh
+or ncftpput.
 
 \section sec_usage Library Usage Tutorial
 
-A simple examples shows how easy the execution pipe can be set up.
+The following tutorial shows some simple examples on how an execution pipe can
+be set up.
 
-To use the library you must
+To use the library a program must
 
 \code
 #include "stx-execpipe.h"
 \endcode
 
 and later link against libstx-execpipe.a or include the corresponding .o / .cc
-in your project.
+in the project's dependencies.
 
 To run a sequence of programs you must first initialize a new ExecPipe
 object. The ExecPipe object is referenced counted so you can easily pass it
@@ -63,7 +65,9 @@ stx::ExecPipe ep;	      	// creates new pipe
 stx::ExecPipe ep_ref1 = ep;   	// reference to the same pipe.
 \endcode
 
-Once created you can set up the input stream source using one of the four set_input functions. Note that these are mutually exclusive, you must call at most one of the following functions!
+Once created the input stream source can be set using one of the four
+set_input_*() functions. Note that these are mutually exclusive, you must call
+at most one of the following functions!
 
 \code
 // you can designate an existing file as input stream
@@ -113,11 +117,11 @@ ep.add_execp("cat");
 // same with up to three parameters.
 ep.add_execp("echo", "one", "two", "three");
 
-// and works also with a vector of arguements.
+// and also works with a vector of arguments.
 ep.add_execp(&tarargs);
 
 // most versatile function: call execve() with program name, argv[] arguments
-// and environment.
+// and a set of environment variables.
 std::vector<std::string> gzipargs;
 gzipargs.push_back("gunzip");		// this changes argv[0]
 
@@ -132,7 +136,7 @@ ep.add_function(&function);
 \endcode
 
 After configuring the pipe stages the user program can redirect the pipe's
-output using one of the four set_output functions. These correspond directly
+output using one of the four set_output_*() functions. These correspond directly
 the to input functions.
 
 \code
@@ -154,7 +158,7 @@ ep.set_output_sink(&sink);
 
 The three steps above can be done in any order. Once the pipeline is configured
 as required, a call to run() will set up the input and output file descriptors,
-launch all children programs, wait till these finish and concurrently process
+launch all children programs, wait until these finish and concurrently process
 data passed between parent and children.
 
 If any system calls fail while running the pipe, the run() function will
@@ -185,8 +189,8 @@ int rg = ep.get_return_signal(1);
 \endcode
 
 Most program have a return code of 0 when no error occurred. Therefore, a
-convenience function is available which check that all program stages returned
-zero. This is what would usually be used.
+convenience function is available which checks whether all program stages
+returned zero. This is what would usually be used.
 
 \code
 // check all that program returned zero
@@ -201,14 +205,19 @@ else {
 After checking the return error codes the pipe's results can be used.
 
 The tarball contains three simple examples of using the different exec()
-variants and input/output redirections. See \ref simple1.cc "examples/simple1.cc", \ref simple2.cc "examples/simple2.cc" or \ref simple3.cc "examples/simple3.cc".
+variants and input/output redirections. See \ref simple1.cc
+"examples/simple1.cc", \ref simple2.cc "examples/simple2.cc" or \ref simple3.cc
+"examples/simple3.cc". More a more elaborate example using data processing
+classes see the continued tutorial below.
 
 \section sec_functionals Data Processing Classes
 
 One of the big features of the STX ExecPipe classes is the ability to insert
 intermediate asynchronous data processing classes into the pipe sequence. The
-data of the pipe line is returned to the parent process and after arbitrary
-computations can be sent on to the following execution stages.
+data of the pipe line is returned to the parent process and, after arbitrary
+computations, can be sent on to the following execution stages. Besides
+intermediate processing, the input and output stream can be attached to source
+or sink classes.
 
 This feature can be used to generate input data, e.g. binary data or file
 listing, or peek at the data flowing between stages, e.g. to compute a SHA1
@@ -220,20 +229,22 @@ intermediate processing between stages or stx::PipeSink for receiving output.
 
 For generating an input stream a class must derive from stx::PipeSource and
 implement the \ref stx::PipeSource::poll "poll()" function. This function is
-called when new data can be pushed into the pipe. When called data must be
-generated and delivered via the \ref stx::PipeSource::write "write()" function
-of stx::PipeSource. If more data is available \ref stx::PipeSource::poll
-"poll()" must return true, otherwise the input stream is terminated.
+called when new data can be pushed into the pipe. When \ref
+stx::PipeSource::poll "poll()" is called, new data must be generated and
+delivered via the \ref stx::PipeSource::write "write()" function of
+stx::PipeSource. If more data is available \ref stx::PipeSource::poll "poll()"
+must return true, otherwise the input stream is terminated.
 
 Intermediate data processing classes must derive from stx::PipeFunction and
 implement the two pure virtual function \ref stx::PipeFunction::process
-"process()" and \ref stx::PipeFunction::eof "eof()". As the name suggests data
-is issued to the class via the \ref stx::PipeFunction::process "process()"
+"process()" and \ref stx::PipeFunction::eof "eof()". As the name suggests, data
+is delivered to the class via the \ref stx::PipeFunction::process "process()"
 function. After processing the data it may be forwarded to the next pipe stage
-via the \ref stx::PipeFunction::write "write()" inherited function. Note that
+via the inherited\ref stx::PipeFunction::write "write()" function. Note that
 the library does not automatically forward data, so if you forget to write()
 data, then the following stage does not receive anything. When the preceding
-processing stage closes its data stream the function eof() is called.
+processing stage closes its data stream the function \ref
+stx::PipeFunction::eof "eof()" is called.
 
 To receive the output stream a class must derive from stx::PipeSink. Similar to
 stx::PipeFunction, an output sink must implement the two pure virtual function
@@ -241,8 +252,9 @@ stx::PipeFunction, an output sink must implement the two pure virtual function
 "eof()". However, different from an intermediate class the stx::PipeSink does
 not provide a write() function, so no data can be forwarded.
 
-For a full example of using stx::PipeSource and stx::PipeFunction see \ref
-functions1.cc "examples/functions1.cc".
+For a full example of using stx::PipeSource to iterate through a file list and
+stx::PipeFunction to compute an intermediate SHA1 digest see \ref functions1.cc
+"examples/functions1.cc".
 
 */
 
