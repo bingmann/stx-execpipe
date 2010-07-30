@@ -20,6 +20,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+// this should be set by autoconf. check it again here if compiled separately.
+#ifndef _FILE_OFFSET_BITS
+#define _FILE_OFFSET_BITS 64
+#endif
+
 #include "stx-execpipe.h"
 
 #include <stdexcept>

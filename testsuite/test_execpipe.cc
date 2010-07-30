@@ -256,6 +256,27 @@ void test_object_program_object_program_string()
     assert( output == "0b66fcadf3a46cce7184487c4dabaf0f  -\n" );
 }
 
+void test_object_program_object_string()
+{
+    stx::ExecPipe ep;
+
+    TestSource source;
+    ep.set_input_source(&source);
+
+    std::string output;
+    ep.set_output_string(&output);
+
+    ep.add_execp("cat");
+
+    TestFunctionMD5 func;
+    ep.add_function(&func);
+
+    assert( ep.run().all_return_codes_zero() );
+
+    assert( HexString(func.m_digest) == "0b66fcadf3a46cce7184487c4dabaf0f" );
+    assert( output.size() == 100*1024 );
+}
+
 void test_none_program_set_string()
 {
     stx::ExecPipe ep;
@@ -318,6 +339,7 @@ int main()
     test_string_program_object();
     test_object_program_string();
     test_object_program_object_program_string();
+    test_object_program_object_string();
     test_none_program_set_string();
 
     test_error_none_program_none();

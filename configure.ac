@@ -31,6 +31,9 @@ AC_C_INLINE
 AC_HEADER_STDC
 AC_CHECK_FUNCS([memset])
 
+# Arrange for 64-bit file offsets and special open() call.
+AC_SYS_LARGEFILE
+
 # Check whether to enable gcov coverage flags and macros
 
 AC_ARG_ENABLE(gcov,

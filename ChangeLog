@@ -1,0 +1,8 @@
+2010-07-30	Timo Bingmann
+	* configure.ac: added AC_SYS_LARGEFILE to enable in/output to
+	large files.
+	* stx-execpipe.cc: also added _FILE_OFFSET_BITS here for direct
+	compilation and linking.
+
+2010-07-18	Timo Bingmann
+	initial release.
