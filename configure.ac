@@ -1,7 +1,7 @@
 # $Id$ -*- Autoconf -*-
 
 AC_PREREQ(2.65)
-AC_INIT(stx-execpipe, 0.7)
+AC_INIT(stx-execpipe, 0.7.1)
 AC_CONFIG_SRCDIR(src/stx-execpipe.cc)
 AC_CONFIG_AUX_DIR(acscripts)
 
