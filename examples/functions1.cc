@@ -2,7 +2,7 @@
 // $Id$
 
 /*
- * STX Execution Pipe Library v0.7.0
+ * STX Execution Pipe Library v0.7.1
  * Copyright (C) 2010 Timo Bingmann
  *
  * This library is free software; you can redistribute it and/or modify it
