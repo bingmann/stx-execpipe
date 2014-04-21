@@ -1,5 +1,4 @@
 // -*- mode: c++; fill-column: 79 -*-
-// $Id$
 
 /*
  * STX Execution Pipe Library v0.7.0
